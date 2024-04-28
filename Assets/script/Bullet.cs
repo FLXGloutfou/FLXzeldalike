@@ -1,18 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class bullet : MonoBehaviour
+public class Bullet : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public int damage = 10; // Dégâts infligés par la balle
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerEnter2D(Collider2D other)
     {
-        
+        // Vérifier si la balle entre en collision avec un ennemi
+        if (other.CompareTag("Enemy"))
+        {
+            // Appliquer des dégâts à l'ennemi
+            other.GetComponent<Enemy>().TakeDamage(damage);
+
+            // Détruire la balle lorsqu'elle touche un ennemi
+            Destroy(gameObject);
+        }
     }
 }
+

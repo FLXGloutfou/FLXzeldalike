@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Rewired;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -8,27 +9,26 @@ public class InventoryManager : MonoBehaviour
     private bool menuActivated;
     public ItemSlot[] itemSlot;
 
-    // Start is called before the first frame update
+    private Player rewiredPlayer;
+
     void Start()
     {
-        
+        rewiredPlayer = ReInput.players.GetPlayer(0);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("inventory") && menuActivated)
+        if (rewiredPlayer.GetButtonDown("Inventory") && menuActivated)
         {
             InventoryMenu.SetActive(false);
             menuActivated = false;
         }
-        else if (Input.GetButtonDown("inventory") && !menuActivated)
+        else if (rewiredPlayer.GetButtonDown("Inventory") && !menuActivated)
         {
             InventoryMenu.SetActive(true);
             menuActivated = true;
         }
     }
-
 
     public void AddItem(string itemName, int quantity, Sprite itemSprite)
     {
@@ -41,4 +41,16 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
+    public bool HasFuel()
+    {
+        foreach (ItemSlot slot in itemSlot)
+        {
+            if (slot.itemName == "fuel" && slot.quantity > 0)
+            {
+                return true; // Le joueur a au moins un fuel dans son inventaire
+            }
+        }
+        return false; // Le joueur n'a pas de fuel dans son inventaire
+    }
+
 }
